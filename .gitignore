@@ -340,3 +340,5 @@ pip-selfcheck.json
 clone_instagram_api/media/
 
 
+/.idea/clone_instagram_api.iml
+/.idea/misc.xml

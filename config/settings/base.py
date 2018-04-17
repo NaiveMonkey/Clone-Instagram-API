@@ -52,6 +52,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # APPS
 # ------------------------------------------------------------------------------
+# 장고와 함께 default 설치되어 있음
 DJANGO_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,15 +63,17 @@ DJANGO_APPS = [
     # 'django.contrib.humanize', # Handy template tags
     'django.contrib.admin',
 ]
+# 인터넷에서 찾아서 설치하는 앱들에 속함
 THIRD_PARTY_APPS = [
-    'crispy_forms',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
 ]
+# 우리가 생성한 앱
 LOCAL_APPS = [
     'clone_instagram_api.users.apps.UsersConfig',
+    'clone_instagram_api.images.apps.ImagesConfig',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

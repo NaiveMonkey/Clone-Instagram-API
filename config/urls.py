@@ -14,12 +14,12 @@ urlpatterns = [
     ),
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
+
     # User management
-    url(
-        r"^users/",
-        include("clone_instagram_api.users.urls", namespace="users"),
-    ),
+    url(r"^users/", include("clone_instagram_api.users.urls", namespace="users"),),
+    url(r"^images/", include("clone_instagram_api.images.urls", namespace='images')),
     url(r"^accounts/", include("allauth.urls")),
+
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

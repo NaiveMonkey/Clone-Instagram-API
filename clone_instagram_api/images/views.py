@@ -1,31 +1,97 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models, serializers
+from rest_framework import status
 
 # Create your views here.
-class ListAllImages(APIView):
+class Feed(APIView):
 
     def get(self, request, format=None):
 
-        all_images = models.Image.objects.all()
-        serializer = serializers.ImagesSerializer(all_images, many=True)
+        user = request.user
 
-        return Response(data=serializer.data)
+        following_users = user.following.all()
 
-class ListAllComments(APIView):
+        images_list = []
 
-    def get(self, request, format=None):
+        for following_user in following_users:
 
-        all_comments = models.Comment.objects.all()
-        serializer = serializers.CommentSerializer(all_comments, many=True)
+            # 모든 image 중에서 2개만 가져올 것
+            user_images = following_user.images.all()[:2]
 
-        return Response(data=serializer.data)
+            for image in user_images:
 
-class ListAllLikes(APIView):
+                images_list.append(image)
 
-    def get(self, request, formant=None):
+        sorted_list = sorted(images_list, key=lambda image: image.created_at, reverse=True)
 
-        all_likes = models.Like.objects.all()
-        serializer = serializers.LikeSerializer(all_likes, many=True)
+        serializer = serializers.ImagesSerializer(sorted_list, many=True)
 
-        return Response(data=serializer.data)
+        return Response(serializer.data)
+
+class LikeImage(APIView):
+
+    def post(self, request, image_id, format=None):
+
+        user = request.user
+
+        try:
+            found_image = models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            preexisiting_like = models.Like.objects.get(
+                creator=user,
+                image=found_image
+            )
+            preexisiting_like.delete()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except models.Like.DoesNotExist:
+
+            models.Like.objects.create(
+                creator=user,
+                image = found_image
+            )
+
+            return Response(status=status.HTTP_200_OK)
+
+class CommentOnImage(APIView):
+
+    def post(self, request, image_id, format=None):
+
+        user = request.user
+
+        try:
+            found_image = models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.CommentSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save(creator=user, image=found_image)
+
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+        else:
+
+            return Response(data=serializer.errors, status= status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class Comment(APIView):
+
+    def delete(self, request, comment_id, formant=None):
+
+        user = request.user
+
+        try:
+            # comment 의 creator 와 삭제하고자 명령하는 user 가 서로 같아야함
+            comment = models.Comment.objects.get(id=comment_id, creator=user)
+            comment.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except models.Comment.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+

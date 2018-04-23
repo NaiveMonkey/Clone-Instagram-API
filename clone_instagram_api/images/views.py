@@ -16,6 +16,7 @@ class Feed(APIView):
 
         for following_user in following_users:
 
+            # 모든 image 중에서 2개만 가져올 것
             user_images = following_user.images.all()[:2]
 
             for image in user_images:
@@ -78,3 +79,19 @@ class CommentOnImage(APIView):
         else:
 
             return Response(data=serializer.errors, status= status.HTTP_405_METHOD_NOT_ALLOWED)
+
+class Comment(APIView):
+
+    def delete(self, request, comment_id, formant=None):
+
+        user = request.user
+
+        try:
+            # comment 의 creator 와 삭제하고자 명령하는 user 가 서로 같아야함
+            comment = models.Comment.objects.get(id=comment_id, creator=user)
+            comment.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except models.Comment.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+

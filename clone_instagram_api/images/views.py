@@ -47,7 +47,6 @@ class LikeImage(APIView):
             )
 
             return Response(status=status.HTTP_304_NOT_MODIFIED)
-        
         except models.Like.DoesNotExist:
 
             models.Like.objects.create(

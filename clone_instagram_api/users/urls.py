@@ -3,12 +3,42 @@ from . import views
 
 app_name = "users"
 urlpatterns = [
-    url(regex=r"^$", view=views.UserListView.as_view(), name="list"),
-    url(regex=r"^~redirect/$", view=views.UserRedirectView.as_view(), name="redirect"),
-    url(regex=r"^~update/$", view=views.UserUpdateView.as_view(), name="update"),
     url(
-        regex=r"^(?P<username>[\w.@+-]+)/$",
-        view=views.UserDetailView.as_view(),
-        name="detail",
+        regex=r"^explore/$",
+        view=views.ExploreUsers.as_view(),
+        name="explore_users"
     ),
+    url(
+        regex=r"^(?P<user_id>[0-9]+)/follow/$",
+        view=views.FollowUser.as_view(),
+        name='follow_user'
+    ),
+    url(
+        regex=r"^(?P<user_id>[0-9]+)/unfollow/$",
+        view=views.UnFollowUser.as_view(),
+        name='unfollow_user'
+    ),
+    url(
+        # regex=r"^(?P<username>\w+)/$",
+        regex=r"^(?P<user_id>[0-9]+)/$",
+        view=views.UserProfile.as_view(),
+        name='user_profile'
+    ),
+    url(
+        # regex=r"^(?P<username>\w+)/followers/$",
+        regex=r"^(?P<user_id>[0-9]+)/followers/$",
+        view=views.UserFollowers.as_view(),
+        name='user_followers'
+    ),
+    url(
+        # regex=r"^(?P<username>\w+)/following/$",
+        regex=r"^(?P<user_id>[0-9]+)/following/$",
+        view=views.UserFollowing.as_view(),
+        name='user_following'
+    ),
+    url(
+        regex=r"^search/$",
+        view=views.Search.as_view(),
+        name='user_search'
+    )
 ]

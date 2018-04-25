@@ -69,6 +69,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'taggit', # Tags for the photos
 ]
 # 우리가 생성한 앱
 LOCAL_APPS = [
@@ -241,3 +242,4 @@ SOCIALACCOUNT_ADAPTER = 'clone_instagram_api.users.adapters.SocialAccountAdapter
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+TAGGIT_CASE_INSENSITIVE = True

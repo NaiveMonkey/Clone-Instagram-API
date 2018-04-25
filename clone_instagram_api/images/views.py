@@ -25,6 +25,12 @@ class Feed(APIView):
 
                 images_list.append(image)
 
+        my_images = user.images.all()[:2]
+
+        for image in my_images:
+
+            images_list.append(image)
+
         sorted_list = sorted(images_list, key=lambda image: image.created_at, reverse=True)
 
         serializer = serializers.ImagesSerializer(sorted_list, many=True)
@@ -159,3 +165,16 @@ class Search(APIView):
         else:
 
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class ImageDetail(APIView):
+
+    def get(self, request, image_id, format=None):
+
+        try:
+            image = models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.ImagesSerializer(image)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

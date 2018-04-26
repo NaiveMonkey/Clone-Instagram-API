@@ -70,6 +70,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     'rest_framework',
     'taggit', # Tags for the photos
+    'taggit_serializer', # Tag serializer
 ]
 # 우리가 생성한 앱
 LOCAL_APPS = [

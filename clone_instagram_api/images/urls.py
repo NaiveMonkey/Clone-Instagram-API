@@ -14,12 +14,12 @@ urlpatterns = [
         name='image'
     ),
     url( # id 에 해당하는 image 에 like
-        regex=r"^(?P<image_id>[0-9]+)/like/$",
+        regex=r"^(?P<image_id>[0-9]+)/likes/$",
         view=views.LikeImage.as_view(),
         name='like_image'
     ),
     url( # id 에 해당하는 image 에 unlike
-        regex=r"^(?P<image_id>[0-9]+)/unlike/$",
+        regex=r"^(?P<image_id>[0-9]+)/unlikes/$",
         view=views.LikeImage.as_view(),
         name='unlike_image'
     ),

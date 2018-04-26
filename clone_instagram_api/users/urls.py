@@ -38,6 +38,10 @@ urlpatterns = [
         view=views.UserFollowing.as_view(),
         name='user_following'
     ),
+    url(regex=r'^login/facebook/$',
+        view=views.FacebookLogin.as_view(),
+        name='fb_login'
+    ),
     url(
         regex=r"^search/$",
         view=views.Search.as_view(),

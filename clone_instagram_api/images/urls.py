@@ -5,7 +5,7 @@ app_name = 'images'
 urlpatterns = [
     url(
         regex=r"^$",
-        view=views.Feed.as_view(),
+        view=views.Images.as_view(),
         name='feed'
     ),
     url(  # id 에 해당하는 image 불러오기

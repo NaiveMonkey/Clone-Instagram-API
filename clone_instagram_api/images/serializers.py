@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from . import models
 from clone_instagram_api.users import models as user_models
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 class SmallImageSerializer(serializers.ModelSerializer):
 
@@ -50,10 +52,11 @@ class LikeSerializer(serializers.ModelSerializer):
         model = models.Like
         fields = '__all__'
 
-class ImagesSerializer(serializers.ModelSerializer):
+class ImagesSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     comments = CommentSerializer(many=True) # nested serializer
     creator = FeedUserSerializer()
+    tags = TagListSerializerField()
 
     class Meta:
         model = models.Image
@@ -65,5 +68,17 @@ class ImagesSerializer(serializers.ModelSerializer):
             'comments',
             'like_count',
             'creator',
+            'tags',
             'created_at'
+        )
+
+class InputImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Image
+        fields = (
+            'id',
+            'file',
+            'location',
+            'caption'
         )

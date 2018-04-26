@@ -3,14 +3,14 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views import defaults as default_views
-from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
 
     # User management
-    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r"^users/", include("clone_instagram_api.users.urls", namespace="users"),),
     url(r"^images/", include("clone_instagram_api.images.urls", namespace="images")),
     url(r"^notifications/", include("clone_instagram_api.notifications.urls", namespace="notifications")),
